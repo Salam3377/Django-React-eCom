@@ -10,6 +10,10 @@ import {
     PRODUCT_DETAILS_FAIL
 } from "../constants/productConstants"
 
+
+
+
+
 export const listProducts = () => async (dispatch) => {
     try{
         dispatch({ type: PRODUCT_LIST_REQUEST })
@@ -24,12 +28,16 @@ export const listProducts = () => async (dispatch) => {
     catch(error) {
         dispatch({
             type: PRODUCT_LIST_FAIL,
-            payload: error.resoponse && error.resoponse.data.message
-            ? error.resoponse.data.message
+            payload: error.resoponse && error.resoponse.data.detail
+            ? error.resoponse.data.detail
             :error.message,
         })
     }
 }
+
+
+
+
 
 export const listProductDetails = (id) => async (dispatch) => {
     try{
@@ -45,8 +53,8 @@ export const listProductDetails = (id) => async (dispatch) => {
     catch(error) {
         dispatch({
             type: PRODUCT_DETAILS_FAIL,
-            payload: error.resoponse && error.resoponse.data.message
-            ? error.resoponse.data.message
+            payload: error.resoponse && error.resoponse.data.detail
+            ? error.resoponse.data.detail
             :error.message,
         })
     }
