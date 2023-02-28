@@ -5,7 +5,10 @@ import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap'
 import Message from '../Message'
 import { addToCart, removeFromCart } from '../../actions/cartActions.'
 
+
+
 function CartScreen() {
+
     const productId = useParams()
     const navigate = useNavigate()
     const location = useLocation()
@@ -27,9 +30,9 @@ function CartScreen() {
     const removeFromCartHandler =(id) => {
         dispatch(removeFromCart(id))
     }
-
+ //fix here ----------------------------------------------------
     const checkOutHandler = () => {
-        navigate('/login?redirect=shipping')
+        navigate(`/login?redirect=/shipping`)
     }
   return (
     <Row>

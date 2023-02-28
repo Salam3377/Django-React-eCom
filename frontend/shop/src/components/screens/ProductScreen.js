@@ -38,9 +38,13 @@ function ProductScreen() {
     navigate(`/cart/${product_id.id}?qty=${qty}`)
   }
 
+  const goBack = () => {
+    navigate(-1)
+  }
+
     return (
     <div>
-        <Link to ='/' className='btn btn-light my-3'>Back</Link>
+        <Button onClick={goBack} className='btn btn-light my-3'>Back</Button>
         {loading?
             <Loader />
             : error
