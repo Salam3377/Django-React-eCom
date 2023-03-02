@@ -206,7 +206,7 @@ function OrderScreen() {
                                     <ListGroup.Item>
                                         <Button
                                             type='button'
-                                            className='btn btn-block'
+                                            className='col-12'
                                             onClick={deliverHandler}
                                         >
                                             Mark As Delivered
