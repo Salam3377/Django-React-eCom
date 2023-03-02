@@ -11,7 +11,7 @@ from base.serializers import ProductSerializer
 
 from rest_framework import status
 
-
+#GET Products
 @api_view()
 def getProducts(request):
     query = request.query_params.get('keyword')
@@ -39,6 +39,7 @@ def getProducts(request):
     return Response({'products':serializer.data, 'page':page, 'pages':paginator.num_pages})
 
 
+#Single Product
 @api_view()
 def getProduct(request,pk):
     product = Product.objects.get(_id=pk)
@@ -47,6 +48,15 @@ def getProduct(request,pk):
     return Response(serializer.data)
 
 
+#TOP Products
+@api_view(['GET'])
+def getTopProducts(request):
+    products = Product.objects.filter(rating__gte=4).order_by('-rating')[0:5]
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data)
+
+
+#CREATE Product
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
 def createProduct(request):
@@ -67,6 +77,7 @@ def createProduct(request):
 
 
 
+#UPDATE Product
 @api_view(['PUT'])
 @permission_classes([IsAdminUser])
 def updateProduct(request, pk):
@@ -87,6 +98,7 @@ def updateProduct(request, pk):
 
 
 
+#DELETE Product
 @api_view(['DELETE'])
 @permission_classes([IsAdminUser])
 def deleteProduct(request, pk):
@@ -95,6 +107,9 @@ def deleteProduct(request, pk):
     return Response('Producted Deleted')
 
 
+
+
+#Upload Image from frontend
 @api_view(['POST'])
 def uploadImage(request):
     data = request.data
