@@ -28,7 +28,7 @@ function ProductListScreen() {
     const userLogin = useSelector(state => state.userLogin)
     const { userInfo } = userLogin
 
-    let keyword = useLocation().search //navigate.location.search
+    let keyword = useLocation().search
     useEffect(() => {
         dispatch({ type: PRODUCT_CREATE_RESET })
 

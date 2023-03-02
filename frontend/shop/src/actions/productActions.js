@@ -35,11 +35,11 @@ import {
 
 
 
-export const listProducts = () => async (dispatch) => {
+export const listProducts = ( keyword = '') => async (dispatch) => {
     try{
         dispatch({ type: PRODUCT_LIST_REQUEST })
 
-        const { data } = await axios.get('/api/products/')
+        const { data } = await axios.get(`/api/products/${keyword}`)
 
         dispatch({
             type: PRODUCT_LIST_SUCCESS,
@@ -251,8 +251,6 @@ export const createProductReview = (productId, review) => async (dispatch, getSt
             type: PRODUCT_CREATE_REVIEW_SUCCESS,
             payload: data,
         })
-
-
 
     } catch (error) {
         dispatch({
