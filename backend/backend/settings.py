@@ -15,6 +15,7 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+import os
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-!78tjqh7asnq4kno+dj1col)#w+)#g91nd6=(k&3%!ljiyqk$+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'salam-shop.herokuapp.com']
 
 
 # Application definition
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'base.apps.BaseConfig', # added here .apps.BaseConfig
     'rest_framework',
     'corsheaders',
+    'storages',
 ]
 
 
@@ -97,6 +99,7 @@ SIMPLE_JWT = {
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 
 
     'django.middleware.security.SecurityMiddleware',
@@ -113,7 +116,9 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+    os.path.join(BASE_DIR, 'shop/build') #frontend
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -132,13 +137,23 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'salamShop', 
+        'USER': 'Salam',
+        'PASSWORD': os.environ.get('DB_PASS'),
+        'HOST': 'salam-shop.ccwgdzqqlucc.us-east-2.rds.amazonaws.com',
+        'PORT': '5432'
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -178,10 +193,15 @@ STATIC_URL = 'static/'
 MEDIA_URL = '/images/'
 
 STATICFILES_DIRS = [
-    BASE_DIR/ 'static' # here django knows about static folder for images
+    BASE_DIR / 'static', # here django knows about static folder for images
+    BASE_DIR / 'shop/build/static', #frontend
+    # os.path.join(os.path.join(BASE_DIR, 'shop'), 'build', 'static'),
+    
 ]
 
-MEDIA_ROOT = 'static/images' # here is where to upload img files
+MEDIA_ROOT = BASE_DIR / 'static/images' # here is where to upload img files
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+# STATIC_ROOT  =   os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -189,5 +209,14 @@ MEDIA_ROOT = 'static/images' # here is where to upload img files
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+AWS_QUERYSTRING_AUTH = False
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = 'test-salam-bucket'
+
+if os.getcwd() == '/app':
+    DEBUG = False

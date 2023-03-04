@@ -20,7 +20,7 @@ def getProducts(request):
 
 
     products = Product.objects.filter(name__icontains=query)
-
+    productsAdminPage = Product.objects.all()
     page = query = request.query_params.get('page')
     paginator = Paginator(products, 5)
 
@@ -36,7 +36,8 @@ def getProducts(request):
     page = int(page)
 
     serializer = ProductSerializer(products, many=True)
-    return Response({'products':serializer.data, 'page':page, 'pages':paginator.num_pages})
+    serializerAdminPage = ProductSerializer(productsAdminPage, many=True)
+    return Response({'products':serializer.data, 'productsAdmin': serializerAdminPage.data, 'page':page, 'pages':paginator.num_pages})
 
 
 #Single Product
